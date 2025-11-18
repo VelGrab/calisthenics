@@ -13,6 +13,14 @@
     Avanzado: "#ff6b81",
   };
 
+  const noteSuggestions = [
+    "Con banda",
+    "Usé lastre ligero",
+    "Tempo lento",
+    "Agregar pausa arriba",
+  ];
+  const rpeOptions = [6, 7, 8, 9, 10];
+
   const toNumber = (value: string) => {
     const parsed = Number(value);
     return Number.isNaN(parsed) ? 0 : parsed;
@@ -20,6 +28,40 @@
 
   const updateProgress = (patch: Partial<ExerciseProgress>) => {
     progressStore.updateExercise(dayId, exercise.name, patch);
+  };
+
+  const adjustValue = (
+    field: "repsPerMin" | "minutesCompleted" | "rpe",
+    delta: number,
+    limits: { min: number; max: number }
+  ) => {
+    const next = Math.min(
+      limits.max,
+      Math.max(limits.min, (current?.[field] ?? 0) + delta)
+    );
+    updateProgress({ [field]: next } as Partial<ExerciseProgress>);
+  };
+
+  const handleInputValue = (
+    field: "repsPerMin" | "minutesCompleted",
+    value: string
+  ) => {
+    const parsed = toNumber(value);
+    updateProgress({ [field]: parsed } as Partial<ExerciseProgress>);
+  };
+
+  const toggleCompleted = () => {
+    updateProgress({ completed: !current.completed });
+  };
+
+  const appendNote = (snippet: string) => {
+    const existing = current.notes?.trim();
+    const alreadyIncluded = existing
+      ?.toLowerCase()
+      .includes(snippet.toLowerCase());
+    if (alreadyIncluded) return;
+    const next = existing ? `${existing} · ${snippet}` : snippet;
+    updateProgress({ notes: next });
   };
 
   $: current =
@@ -48,53 +90,103 @@
     {/if}
   </header>
 
-  {#if exercise.notes}
-    <p class="notes">{exercise.notes}</p>
-  {/if}
+  <div class="quick-actions">
+    {#if exercise.notes}
+      <p class="notes">{exercise.notes}</p>
+    {/if}
+    <button
+      type="button"
+      class:selected={current.completed}
+      on:click={toggleCompleted}
+    >
+      {current.completed ? "Completado" : "Marcar como completo"}
+    </button>
+  </div>
 
   <div class="inputs">
-    <label>
+    <label class="counter">
       <span>Reps/min</span>
-      <input
-        type="number"
-        min="0"
-        max="30"
-        step="1"
-        value={current.repsPerMin}
-        on:change={(event) =>
-          updateProgress({ repsPerMin: toNumber(event.currentTarget.value) })}
-      />
-    </label>
-
-    <label>
-      <span>Min completados</span>
-      <input
-        type="number"
-        min="0"
-        max="15"
-        step="1"
-        value={current.minutesCompleted}
-        on:change={(event) =>
-          updateProgress({
-            minutesCompleted: toNumber(event.currentTarget.value),
-          })}
-      />
-    </label>
-
-    <label class="rpe">
-      <span>RPE (Esfuerzo)</span>
-      <div class="rpe-control">
+      <div class="counter-control">
+        <button
+          type="button"
+          on:click={() => adjustValue("repsPerMin", -1, { min: 0, max: 60 })}
+          aria-label="Restar una repetición"
+        >
+          –
+        </button>
         <input
-          type="range"
-          min="1"
-          max="10"
-          value={current.rpe}
+          type="number"
+          inputmode="numeric"
+          min="0"
+          max="60"
+          step="1"
+          value={current.repsPerMin}
           on:input={(event) =>
-            updateProgress({ rpe: toNumber(event.currentTarget.value) })}
+            handleInputValue("repsPerMin", event.currentTarget.value)}
         />
-        <strong>{current.rpe}/10</strong>
+        <button
+          type="button"
+          on:click={() => adjustValue("repsPerMin", 1, { min: 0, max: 60 })}
+          aria-label="Sumar una repetición"
+        >
+          +
+        </button>
       </div>
     </label>
+
+    <label class="counter">
+      <span>Min completados</span>
+      <div class="counter-control">
+        <button
+          type="button"
+          on:click={() =>
+            adjustValue("minutesCompleted", -1, { min: 0, max: 20 })}
+          aria-label="Restar un minuto"
+        >
+          –
+        </button>
+        <input
+          type="number"
+          inputmode="numeric"
+          min="0"
+          max="20"
+          step="1"
+          value={current.minutesCompleted}
+          on:input={(event) =>
+            handleInputValue("minutesCompleted", event.currentTarget.value)}
+        />
+        <button
+          type="button"
+          on:click={() =>
+            adjustValue("minutesCompleted", 1, { min: 0, max: 20 })}
+          aria-label="Sumar un minuto"
+        >
+          +
+        </button>
+      </div>
+    </label>
+
+    <div class="rpe">
+      <span>RPE (esfuerzo)</span>
+      <div class="chip-row">
+        {#each rpeOptions as rpeValue}
+          <button
+            type="button"
+            class:selected={current.rpe === rpeValue}
+            on:click={() => updateProgress({ rpe: rpeValue })}
+          >
+            {rpeValue}
+          </button>
+        {/each}
+        <button
+          type="button"
+          class="reset-rpe"
+          on:click={() => updateProgress({ rpe: 7 })}
+        >
+          Reset
+        </button>
+      </div>
+    </div>
   </div>
 
   <label class="notes-area">
@@ -105,6 +197,13 @@
       value={current.notes}
       on:input={(event) => updateProgress({ notes: event.currentTarget.value })}
     ></textarea>
+    <div class="note-chips">
+      {#each noteSuggestions as suggestion}
+        <button type="button" on:click={() => appendNote(suggestion)}>
+          {suggestion}
+        </button>
+      {/each}
+    </div>
   </label>
 
   <label class="checkbox">
@@ -114,7 +213,12 @@
       on:change={(event) =>
         updateProgress({ completed: event.currentTarget.checked })}
     />
-    <span>Bloque completado ✔</span>
+    <span>
+      <span class="material-icon">
+        {current.completed ? "check_circle" : "radio_button_unchecked"}
+      </span>
+      Bloque completado
+    </span>
   </label>
 </article>
 
@@ -169,9 +273,32 @@
     color: #cfd3f7;
   }
 
+  .quick-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .quick-actions button {
+    align-self: flex-start;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    color: white;
+    font-weight: 600;
+    padding: 0.4rem 1.2rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
+  }
+
+  .quick-actions button.selected {
+    background: var(--accent);
+    color: #05060d;
+  }
+
   .inputs {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 1rem;
   }
 
@@ -181,6 +308,23 @@
     gap: 0.35rem;
     font-size: 0.85rem;
     color: #9fa6d4;
+  }
+
+  .counter-control {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .counter-control button {
+    border: none;
+    background: rgba(255, 255, 255, 0.08);
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 0.85rem;
+    font-size: 1.2rem;
+    cursor: pointer;
   }
 
   input[type="number"],
@@ -197,14 +341,37 @@
     min-height: 70px;
   }
 
-  .rpe-control {
+  .rpe {
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .chip-row {
+    display: flex;
+    flex-wrap: wrap;
     gap: 0.5rem;
   }
 
-  input[type="range"] {
-    flex: 1;
+  .chip-row button {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0.75rem;
+    padding: 0.3rem 0.8rem;
+    background: transparent;
+    color: #f6f8ff;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .chip-row button.selected {
+    background: rgba(102, 255, 216, 0.25);
+    border-color: var(--accent);
+    color: #05060d;
+  }
+
+  .reset-rpe {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-style: dashed !important;
   }
 
   .checkbox {
@@ -218,5 +385,48 @@
   .checkbox input {
     width: 18px;
     height: 18px;
+  }
+
+  .checkbox span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .checkbox :global(.material-icon) {
+    font-size: 1rem;
+  }
+
+  .note-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .note-chips button {
+    border: none;
+    border-radius: 0.75rem;
+    background: rgba(255, 255, 255, 0.08);
+    color: white;
+    padding: 0.3rem 0.75rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+  }
+
+  input[type="number"] {
+    width: 3rem;
+    text-align: center;
+    padding: 0.25rem 0.5rem;
+  }
+
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
   }
 </style>

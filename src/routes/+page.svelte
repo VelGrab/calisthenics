@@ -1,6 +1,5 @@
 <script lang="ts">
   import {
-    EmomTimer,
     ExerciseTracker,
     generalTips,
     progressStore,
@@ -67,6 +66,12 @@
     }
   };
 
+  const scrollToSection = (targetId: string) => {
+    if (typeof document === "undefined") return;
+    const section = document.getElementById(targetId);
+    section?.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
   $: completedExercises = Object.values($progressStore.log ?? {}).reduce(
     (acc, exercises) =>
       acc +
@@ -92,10 +97,14 @@
 
 <svelte:head>
   <title>Calisthenics · Seguimiento híbrido</title>
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0"
+  />
 </svelte:head>
 
 <main class="page">
-  <section class="hero">
+  <section class="hero" id="overview-section">
     <div class="hero-content">
       <p class="eyebrow">Rutina híbrida · EMOM + Tradicional</p>
       <h1>Calistenia orientada a fuerza, control y estética</h1>
@@ -126,12 +135,56 @@
       <button class="reset" on:click={resetProgress}>Limpiar progreso</button>
     </div>
 
-    <div class="hero-timer">
-      <EmomTimer title="Temporizador EMOM" />
+  </section>
+
+  <section class="shortcuts" aria-label="Accesos rápidos">
+    <h2>Simplifica tu sesión</h2>
+    <div class="shortcut-grid">
+      <button
+        type="button"
+        on:click={() => scrollToSection("overview-section")}
+      >
+        <span class="material-icon">insights</span>
+        <div>
+          <strong>Ver resumen general</strong>
+          <small>Consulta progreso y highlights rápidamente.</small>
+        </div>
+      </button>
+      <button type="button" on:click={() => scrollToSection("routine-section")}>
+        <span class="material-icon">view_agenda</span>
+        <div>
+          <strong>Ver agenda</strong>
+          <small>Salta directo al bloque del día.</small>
+        </div>
+      </button>
+      <button
+        type="button"
+        on:click={() => scrollToSection("registro-section")}
+      >
+        <span class="material-icon">assignment</span>
+        <div>
+          <strong>Actualizar registro</strong>
+          <small>Comparte tus números semana a semana.</small>
+        </div>
+      </button>
+      <button type="button" on:click={() => scrollToSection("tips-section")}>
+        <span class="material-icon">lightbulb</span>
+        <div>
+          <strong>Consejos rápidos</strong>
+          <small>Repasa técnica y descansos clave.</small>
+        </div>
+      </button>
+      <button type="button" class="reset-shortcut" on:click={resetProgress}>
+        <span class="material-icon">delete_sweep</span>
+        <div>
+          <strong>Limpiar progreso</strong>
+          <small>Reinicia todos los registros.</small>
+        </div>
+      </button>
     </div>
   </section>
 
-  <section class="tips">
+  <section class="tips" id="tips-section">
     <div>
       <h2>Consejos clave</h2>
       <p>
@@ -146,7 +199,7 @@
     </ul>
   </section>
 
-  <section class="routine">
+  <section class="routine" id="routine-section">
     <div class="routine-header">
       <div>
         <h2>Agenda semanal</h2>
@@ -167,7 +220,7 @@
             on:click={() => selectDay(day.id)}
             aria-pressed={day.id === selectedDayId}
           >
-            <span>{day.icon}</span>
+            <span class="material-icon">{day.icon}</span>
             {day.label}
           </button>
         {/each}
@@ -178,7 +231,10 @@
       <article class="day-card" aria-live="polite">
         <header>
           <div>
-            <p class="day-label">{selectedDay.icon} {selectedDay.label}</p>
+            <p class="day-label">
+              <span class="material-icon">{selectedDay.icon}</span>
+              {selectedDay.label}
+            </p>
             <h3>{selectedDay.focus}</h3>
             <p class="highlight">{selectedDay.highlight}</p>
           </div>
@@ -208,7 +264,7 @@
     {/if}
   </section>
 
-  <section class="progress-area">
+  <section class="progress-area" id="registro-section">
     <div class="progression">
       <h2>Progresión semanal</h2>
       <ul>
@@ -291,6 +347,22 @@
     --accent: #66ffd8;
   }
 
+  :global(.material-icon) {
+    font-family: "Material Symbols Rounded";
+    font-variation-settings:
+      "FILL" 0,
+      "wght" 400,
+      "GRAD" 0,
+      "opsz" 24;
+    font-size: 1.25rem;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: none;
+    letter-spacing: normal;
+  }
+
   .page {
     max-width: 1200px;
     margin: 0 auto;
@@ -313,10 +385,6 @@
     border-radius: 1.75rem;
     border: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: 0 25px 60px rgba(8, 12, 26, 0.4);
-  }
-
-  .hero-timer {
-    min-width: 280px;
   }
 
   .eyebrow {
@@ -379,6 +447,61 @@
     color: white;
     font-weight: 600;
     cursor: pointer;
+  }
+
+  .shortcuts {
+    background: rgba(13, 14, 25, 0.85);
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .shortcuts h2 {
+    margin-top: 0;
+  }
+
+  .shortcut-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .shortcut-grid button {
+    border: none;
+    border-radius: 1rem;
+    background: rgba(255, 255, 255, 0.04);
+    color: inherit;
+    padding: 0.85rem 1rem;
+    text-align: left;
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+  }
+
+  .shortcut-grid button:hover {
+    border-color: rgba(102, 255, 216, 0.4);
+    transform: translateY(-2px);
+  }
+
+  .shortcut-grid .material-icon {
+    font-size: 1.5rem;
+    color: #66ffd8;
+  }
+
+  .shortcut-grid strong {
+    display: block;
+  }
+
+  .shortcut-grid small {
+    color: #9ca2ce;
+  }
+
+  .reset-shortcut {
+    border-color: rgba(255, 117, 117, 0.4) !important;
   }
 
   .tips {
@@ -449,6 +572,10 @@
     color: #07070f;
   }
 
+  .day-selector .material-icon {
+    font-size: 1.1rem;
+  }
+
   .day-card {
     margin-top: 1.5rem;
     padding: 1.75rem;
@@ -466,6 +593,15 @@
     color: #8fb5ff;
     font-size: 0.8rem;
     margin: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .day-label .material-icon {
+    text-transform: none;
+    color: #fff;
+    font-size: 1rem;
   }
 
   .day-card h3 {

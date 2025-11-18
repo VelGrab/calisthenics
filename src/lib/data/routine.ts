@@ -40,7 +40,7 @@ export const routineDays: RoutineDay[] = [
   {
     id: "monday",
     label: "Lunes",
-    icon: "🥇",
+    icon: "emoji_events",
     focus: "Pecho, Hombros, Tríceps + ABS (Core Funcional)",
     core: true,
     highlight:
@@ -148,7 +148,7 @@ export const routineDays: RoutineDay[] = [
   {
     id: "tuesday",
     label: "Martes",
-    icon: "🧲",
+    icon: "taunt",
     focus: "Espalda y Bíceps",
     highlight:
       "Controla negativos en dominadas y remos; termina con agarre isométrico.",
@@ -227,7 +227,7 @@ export const routineDays: RoutineDay[] = [
   {
     id: "wednesday",
     label: "Miércoles",
-    icon: "🦵",
+    icon: "directions_walk",
     focus: "Piernas",
     highlight:
       "Mantén rango completo; añade salto o lastre si el volumen resulta fácil.",
@@ -297,7 +297,7 @@ export const routineDays: RoutineDay[] = [
   {
     id: "thursday",
     label: "Jueves",
-    icon: "⚡",
+    icon: "bolt",
     focus: "Pecho, Hombros, Tríceps (Variación)",
     highlight: "Énfasis en tempo y pseudo planche; sin fallo en EMOM.",
     blocks: [
@@ -362,7 +362,7 @@ export const routineDays: RoutineDay[] = [
   {
     id: "friday",
     label: "Viernes",
-    icon: "🔁",
+    icon: "sync",
     focus: "Espalda, Bíceps + ABS (Estética + Fuerza)",
     core: true,
     highlight: "Último día: tirón con pausa y core colgado sin tocar el suelo.",
