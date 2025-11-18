@@ -1,9 +1,10 @@
 <script lang="ts">
-  import type { Exercise, ExerciseProgress } from "$lib";
+  import type { Exercise, ExerciseProgress, WorkoutStyle } from "$lib";
   import { createEmptyExerciseProgress, progressStore } from "$lib";
 
   export let dayId: string;
   export let exercise: Exercise;
+  export let blockStyle: WorkoutStyle = "EMOM";
 
   let current: ExerciseProgress = createEmptyExerciseProgress();
 
@@ -67,9 +68,11 @@
   $: current =
     $progressStore.log?.[dayId]?.[exercise.name] ??
     createEmptyExerciseProgress();
+  $: completionLabel =
+    blockStyle === "EMOM" ? "Min completados" : "Repeticiones completadas";
 </script>
 
-<article class="exercise-card">
+<article class="exercise-card" class:completed={current.completed}>
   <header>
     <div>
       <p class="target">{exercise.target}</p>
@@ -104,67 +107,69 @@
   </div>
 
   <div class="inputs">
-    <label class="counter">
-      <span>Reps/min</span>
-      <div class="counter-control">
-        <button
-          type="button"
-          on:click={() => adjustValue("repsPerMin", -1, { min: 0, max: 60 })}
-          aria-label="Restar una repetición"
-        >
-          –
-        </button>
-        <input
-          type="number"
-          inputmode="numeric"
-          min="0"
-          max="60"
-          step="1"
-          value={current.repsPerMin}
-          on:input={(event) =>
-            handleInputValue("repsPerMin", event.currentTarget.value)}
-        />
-        <button
-          type="button"
-          on:click={() => adjustValue("repsPerMin", 1, { min: 0, max: 60 })}
-          aria-label="Sumar una repetición"
-        >
-          +
-        </button>
-      </div>
-    </label>
+    <div class="counter-pair">
+      <label class="counter">
+        <span>Reps/min</span>
+        <div class="counter-control">
+          <button
+            type="button"
+            on:click={() => adjustValue("repsPerMin", -1, { min: 0, max: 60 })}
+            aria-label="Restar una repetición"
+          >
+            –
+          </button>
+          <input
+            type="number"
+            inputmode="numeric"
+            min="0"
+            max="60"
+            step="1"
+            value={current.repsPerMin}
+            on:input={(event) =>
+              handleInputValue("repsPerMin", event.currentTarget.value)}
+          />
+          <button
+            type="button"
+            on:click={() => adjustValue("repsPerMin", 1, { min: 0, max: 60 })}
+            aria-label="Sumar una repetición"
+          >
+            +
+          </button>
+        </div>
+      </label>
 
-    <label class="counter">
-      <span>Min completados</span>
-      <div class="counter-control">
-        <button
-          type="button"
-          on:click={() =>
-            adjustValue("minutesCompleted", -1, { min: 0, max: 20 })}
-          aria-label="Restar un minuto"
-        >
-          –
-        </button>
-        <input
-          type="number"
-          inputmode="numeric"
-          min="0"
-          max="20"
-          step="1"
-          value={current.minutesCompleted}
-          on:input={(event) =>
-            handleInputValue("minutesCompleted", event.currentTarget.value)}
-        />
-        <button
-          type="button"
-          on:click={() =>
-            adjustValue("minutesCompleted", 1, { min: 0, max: 20 })}
-          aria-label="Sumar un minuto"
-        >
-          +
-        </button>
-      </div>
-    </label>
+      <label class="counter">
+        <span>{completionLabel}</span>
+        <div class="counter-control">
+          <button
+            type="button"
+            on:click={() =>
+              adjustValue("minutesCompleted", -1, { min: 0, max: 20 })}
+            aria-label="Restar un minuto"
+          >
+            –
+          </button>
+          <input
+            type="number"
+            inputmode="numeric"
+            min="0"
+            max="20"
+            step="1"
+            value={current.minutesCompleted}
+            on:input={(event) =>
+              handleInputValue("minutesCompleted", event.currentTarget.value)}
+          />
+          <button
+            type="button"
+            on:click={() =>
+              adjustValue("minutesCompleted", 1, { min: 0, max: 20 })}
+            aria-label="Sumar un minuto"
+          >
+            +
+          </button>
+        </div>
+      </label>
+    </div>
 
     <div class="rpe">
       <span>RPE (esfuerzo)</span>
@@ -206,20 +211,6 @@
     </div>
   </label>
 
-  <label class="checkbox">
-    <input
-      type="checkbox"
-      checked={current.completed}
-      on:change={(event) =>
-        updateProgress({ completed: event.currentTarget.checked })}
-    />
-    <span>
-      <span class="material-icon">
-        {current.completed ? "check_circle" : "radio_button_unchecked"}
-      </span>
-      Bloque completado
-    </span>
-  </label>
 </article>
 
 <style>
@@ -231,6 +222,14 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    transition: border-color 0.2s ease, background 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .exercise-card.completed {
+    border-color: rgba(102, 255, 216, 0.5);
+    background: rgba(23, 25, 43, 0.85);
+    box-shadow: 0 0 25px rgba(102, 255, 216, 0.12);
   }
 
   header {
@@ -298,8 +297,7 @@
 
   .inputs {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 1rem;
+    gap: 1.25rem;
   }
 
   label {
@@ -374,33 +372,11 @@
     border-style: dashed !important;
   }
 
-  .checkbox {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-weight: 600;
-    color: #c6ffbf;
-  }
-
-  .checkbox input {
-    width: 18px;
-    height: 18px;
-  }
-
-  .checkbox span {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-  }
-
-  .checkbox :global(.material-icon) {
-    font-size: 1rem;
-  }
-
   .note-chips {
     display: flex;
     flex-wrap: wrap;
     gap: 0.5rem;
+    margin-top: 0.5rem;
   }
 
   .note-chips button {
@@ -428,5 +404,22 @@
   input[type="number"] {
     -moz-appearance: textfield;
     appearance: textfield;
+  }
+
+  .counter-pair {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  @media (min-width: 768px) {
+    .inputs {
+      grid-template-columns: minmax(0, 1fr) 240px;
+      align-items: flex-start;
+    }
+
+    .counter-pair {
+      flex-direction: row;
+    }
   }
 </style>

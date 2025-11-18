@@ -255,7 +255,11 @@
 
             <div class="exercise-grid">
               {#each block.exercises as exercise}
-                <ExerciseTracker dayId={selectedDay.id} {exercise} />
+                <ExerciseTracker
+                  dayId={selectedDay.id}
+                  {exercise}
+                  blockStyle={block.style}
+                />
               {/each}
             </div>
           </section>
@@ -611,6 +615,7 @@
   .day-card .highlight {
     margin: 0;
     color: #d5dbff;
+    margin-bottom: 1rem;
   }
 
   .chip {

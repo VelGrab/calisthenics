@@ -44,7 +44,7 @@ export const routineDays: RoutineDay[] = [
     focus: "Pecho, Hombros, Tríceps + ABS (Core Funcional)",
     core: true,
     highlight:
-      "Combina EMOM controlado y series al fallo técnico; abs siempre sin tocar el suelo.",
+      "Combina EMOM controlado y series al fallo técnico, abs siempre sin tocar el suelo.",
     blocks: [
       {
         style: "EMOM",
@@ -58,7 +58,7 @@ export const routineDays: RoutineDay[] = [
             videoUrl:
               "https://www.youtube.com/results?search_query=pike+push+ups+handstand+pushups",
             notes:
-              "Si controlas el handstand, usa la variación estricta; si no, mantén un pike sólido.",
+              "Si controlas el handstand, usa la variación estricta, si no, mantén un pike sólido.",
           },
           {
             name: "Fondos en paralelas",
@@ -73,7 +73,7 @@ export const routineDays: RoutineDay[] = [
       {
         style: "Tradicional",
         description:
-          "Hipertrofia de empuje tempo lento; llega al fallo técnico.",
+          "Hipertrofia de empuje tempo lento, llega al fallo técnico.",
         exercises: [
           {
             name: "Flexiones declinadas",
@@ -151,7 +151,7 @@ export const routineDays: RoutineDay[] = [
     icon: "taunt",
     focus: "Espalda y Bíceps",
     highlight:
-      "Controla negativos en dominadas y remos; termina con agarre isométrico.",
+      "Controla negativos en dominadas y remos, termina con agarre isométrico.",
     blocks: [
       {
         style: "EMOM",
@@ -204,7 +204,7 @@ export const routineDays: RoutineDay[] = [
             videoUrl:
               "https://www.youtube.com/results?search_query=curl+hefesto+banda",
             notes:
-              "Hombros alineados encima de las manos; controla la palanca.",
+              "Hombros alineados encima de las manos, controla la palanca.",
           },
         ],
       },
@@ -230,7 +230,7 @@ export const routineDays: RoutineDay[] = [
     icon: "directions_walk",
     focus: "Piernas",
     highlight:
-      "Mantén rango completo; añade salto o lastre si el volumen resulta fácil.",
+      "Mantén rango completo, añade salto o lastre si el volumen resulta fácil.",
     blocks: [
       {
         style: "EMOM",
@@ -273,7 +273,7 @@ export const routineDays: RoutineDay[] = [
             difficulty: "Básico",
             videoUrl:
               "https://www.youtube.com/results?search_query=wall+sit+isometrico",
-            notes: "Ajusta a 90° de rodilla; no apoyes manos en las piernas.",
+            notes: "Ajusta a 90° de rodilla, no apoyes manos en las piernas.",
           },
         ],
       },
@@ -299,7 +299,7 @@ export const routineDays: RoutineDay[] = [
     label: "Jueves",
     icon: "bolt",
     focus: "Pecho, Hombros, Tríceps (Variación)",
-    highlight: "Énfasis en tempo y pseudo planche; sin fallo en EMOM.",
+    highlight: "Énfasis en tempo y pseudo planche, sin fallo en EMOM.",
     blocks: [
       {
         style: "EMOM",
@@ -321,7 +321,7 @@ export const routineDays: RoutineDay[] = [
             videoUrl:
               "https://www.youtube.com/results?search_query=pseudo+planche+push+ups",
             notes:
-              "Carga el peso hacia delante; alterna lados si usas arqueras.",
+              "Carga el peso hacia delante, alterna lados si usas arqueras.",
           },
         ],
       },
