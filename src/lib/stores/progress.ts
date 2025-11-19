@@ -1,6 +1,6 @@
 import { browser } from "$app/environment";
 import { writable } from "svelte/store";
-import { routineDays, weeklyProgression } from "$lib";
+import { routineDays, weeklyProgression } from "../data/routine";
 
 const STORAGE_KEY = "calisthenics-progress-v1";
 
