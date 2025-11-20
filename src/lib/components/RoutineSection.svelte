@@ -1,15 +1,50 @@
 <script lang="ts">
+  import { onMount } from "svelte";
   import ExerciseTracker from "./ExerciseTracker.svelte";
+  import CustomRoutineEditor from "./CustomRoutineEditor.svelte";
   import { routineDays } from "../data/routine";
+  import { customRoutineStore, activeRoutine } from "$lib/stores/customRoutine";
 
-  const days = routineDays;
-  let selectedDayId = days[0]?.id ?? "";
+  let selectedDayId = routineDays[0]?.id ?? "";
+
+  // Auto-select current weekday
+  onMount(() => {
+    const dayOfWeek = new Date().getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+    const dayMap: Record<number, string> = {
+      1: "monday",
+      2: "tuesday",
+      3: "wednesday",
+      4: "thursday",
+      5: "friday",
+      0: "monday", // Sunday defaults to Monday
+      6: "monday", // Saturday defaults to Monday
+    };
+    selectedDayId = dayMap[dayOfWeek] || "monday";
+  });
 
   const selectDay = (dayId: string) => {
     selectedDayId = dayId;
   };
 
-  $: selectedDay = days.find((day) => day.id === selectedDayId) ?? days[0];
+  const toggleMode = () => {
+    const newMode =
+      $customRoutineStore.mode === "default" ? "custom" : "default";
+    customRoutineStore.setMode(newMode);
+  };
+
+  const resetCustomRoutine = () => {
+    if (
+      confirm(
+        "¿Seguro que quieres restaurar la rutina personalizada a los valores por defecto?",
+      )
+    ) {
+      customRoutineStore.resetToDefault();
+    }
+  };
+
+  $: selectedDay =
+    $activeRoutine.find((day) => day.id === selectedDayId) ?? $activeRoutine[0];
+  $: isCustomMode = $customRoutineStore.mode === "custom";
 </script>
 
 <section class="routine" id="routine-section">
@@ -21,19 +56,46 @@
         tu carga real.
       </p>
     </div>
-    <div class="day-selector" role="tablist" aria-label="Días de entrenamiento">
-      {#each days as day}
+
+    <div class="mode-selector">
+      <button
+        type="button"
+        class:selected={!isCustomMode}
+        on:click={toggleMode}
+      >
+        <span class="material-icon">fitness_center</span>
+        Rutina por defecto
+      </button>
+      <button type="button" class:selected={isCustomMode} on:click={toggleMode}>
+        <span class="material-icon">edit</span>
+        Rutina personalizada
+      </button>
+      {#if isCustomMode}
         <button
           type="button"
-          class:selected={day.id === selectedDayId}
-          on:click={() => selectDay(day.id)}
-          aria-pressed={day.id === selectedDayId}
+          class="reset-btn"
+          on:click={resetCustomRoutine}
+          title="Restaurar rutina a valores por defecto"
         >
-          <span class="material-icon">{day.icon}</span>
-          {day.label}
+          <span class="material-icon">refresh</span>
+          Restaurar
         </button>
-      {/each}
+      {/if}
     </div>
+  </div>
+
+  <div class="day-selector" role="tablist" aria-label="Días de entrenamiento">
+    {#each $activeRoutine as day}
+      <button
+        type="button"
+        class:selected={day.id === selectedDayId}
+        on:click={() => selectDay(day.id)}
+        aria-pressed={day.id === selectedDayId}
+      >
+        <span class="material-icon">{day.icon}</span>
+        {day.label}
+      </button>
+    {/each}
   </div>
 
   {#if selectedDay}
@@ -52,7 +114,7 @@
         {/if}
       </header>
 
-      {#each selectedDay.blocks as block}
+      {#each selectedDay.blocks as block, blockIndex}
         <section class="block">
           <div class="block-header">
             <p class="block-style">{block.style}</p>
@@ -71,6 +133,14 @@
               />
             {/each}
           </div>
+
+          {#if isCustomMode}
+            <CustomRoutineEditor
+              dayId={selectedDay.id}
+              {blockIndex}
+              currentExercises={block.exercises}
+            />
+          {/if}
         </section>
       {/each}
     </article>
@@ -125,6 +195,53 @@
   .day-selector button.selected {
     background: rgba(255, 255, 255, 0.12);
     color: #07070f;
+  }
+
+  .mode-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .mode-selector button {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #cfd3f7;
+    font-weight: 600;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    cursor: pointer;
+    display: flex;
+    gap: 0.4rem;
+    align-items: center;
+    transition:
+      background 0.2s ease,
+      color 0.2s ease,
+      border-color 0.2s ease;
+    font-size: 0.85rem;
+  }
+
+  .mode-selector button:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: var(--accent);
+  }
+
+  .mode-selector button.selected {
+    background: var(--accent);
+    color: #05060d;
+    border-color: var(--accent);
+  }
+
+  .reset-btn {
+    background: transparent !important;
+    border-style: dashed !important;
+    color: #ff9a66 !important;
+  }
+
+  .reset-btn:hover {
+    background: rgba(255, 154, 102, 0.1) !important;
+    border-color: #ff9a66 !important;
   }
 
   .day-card {
@@ -186,6 +303,20 @@
     .day-card,
     .block {
       padding: 0.5rem;
+    }
+
+    .routine-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .mode-selector {
+      width: 100%;
+    }
+
+    .mode-selector button {
+      flex: 1;
+      min-width: fit-content;
     }
 
     .day-selector {

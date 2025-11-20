@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { nutritionStore } from "$lib/stores/nutrition";
+  
   type GoalValue = "deficit" | "maintain" | "surplus";
 
   const activityLevels = [
@@ -59,12 +61,21 @@
     return Math.round(clamp(suggested, 200, 500));
   };
 
-  let weight: number | string = 70;
-  let height: number | string = 175;
-  let age: number | string = 28;
-  let sex: "male" | "female" = "male";
-  let activity = activityLevels[1].value;
-  let goal: GoalValue = "deficit";
+  // Initialize from store
+  let weight: number | string = $nutritionStore.weight;
+  let height: number | string = $nutritionStore.height;
+  let age: number | string = $nutritionStore.age;
+  let sex: "male" | "female" = $nutritionStore.sex;
+  let activity = $nutritionStore.activity;
+  let goal: GoalValue = $nutritionStore.goal;
+  
+  // Update store when values change
+  $: nutritionStore.updateField("weight", weight);
+  $: nutritionStore.updateField("height", height);
+  $: nutritionStore.updateField("age", age);
+  $: nutritionStore.updateField("sex", sex);
+  $: nutritionStore.updateField("activity", activity);
+  $: nutritionStore.updateField("goal", goal);
 
   $: parsedWeight = ensureNumber(weight);
   $: parsedHeight = ensureNumber(height);

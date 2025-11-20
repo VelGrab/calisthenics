@@ -34,18 +34,18 @@
   const adjustValue = (
     field: "repsPerMin" | "minutesCompleted" | "rpe",
     delta: number,
-    limits: { min: number; max: number }
+    limits: { min: number; max: number },
   ) => {
     const next = Math.min(
       limits.max,
-      Math.max(limits.min, (current?.[field] ?? 0) + delta)
+      Math.max(limits.min, (current?.[field] ?? 0) + delta),
     );
     updateProgress({ [field]: next } as Partial<ExerciseProgress>);
   };
 
   const handleInputValue = (
     field: "repsPerMin" | "minutesCompleted",
-    value: string
+    value: string,
   ) => {
     const parsed = toNumber(value);
     updateProgress({ [field]: parsed } as Partial<ExerciseProgress>);
@@ -114,6 +114,7 @@
       <div class="field">
         <button
           type="button"
+          class="btn-minus"
           on:click={() => adjustValue("repsPerMin", -1, { min: 0, max: 60 })}
           aria-label="Restar una repetición"
         >
@@ -131,6 +132,7 @@
         />
         <button
           type="button"
+          class="btn-plus"
           on:click={() => adjustValue("repsPerMin", 1, { min: 0, max: 60 })}
           aria-label="Sumar una repetición"
         >
@@ -144,6 +146,7 @@
       <div class="field">
         <button
           type="button"
+          class="btn-minus"
           on:click={() =>
             adjustValue("minutesCompleted", -1, { min: 0, max: 20 })}
           aria-label="Restar un minuto"
@@ -162,6 +165,7 @@
         />
         <button
           type="button"
+          class="btn-plus"
           on:click={() =>
             adjustValue("minutesCompleted", 1, { min: 0, max: 20 })}
           aria-label="Sumar un minuto"
@@ -242,7 +246,7 @@
     gap: 1rem;
     flex-wrap: wrap;
     align-items: center;
-    width: 100%; 
+    width: 100%;
     box-sizing: border-box;
     padding-bottom: 0.75rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
@@ -339,7 +343,8 @@
     min-width: 0;
   }
 
-  .field button {
+  .btn-minus,
+  .btn-plus {
     border: 1px solid rgba(255, 255, 255, 0.15);
     background: transparent;
     color: white;
@@ -350,14 +355,24 @@
     cursor: pointer;
     flex-shrink: 0;
     transition: all 0.15s ease;
+    outline: none;
   }
 
-  .field button:hover {
+  .btn-minus:hover,
+  .btn-plus:hover {
     background: rgba(255, 255, 255, 0.08);
     border-color: var(--accent);
   }
 
-  .field button:active {
+  .btn-minus:focus-visible,
+  .btn-plus:focus-visible {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(102, 255, 216, 0.3);
+  }
+
+  .btn-minus:active,
+  .btn-plus:active {
     transform: scale(0.95);
   }
 
