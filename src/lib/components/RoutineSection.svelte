@@ -325,11 +325,20 @@
       flex-wrap: nowrap;
       justify-content: flex-start;
       scroll-snap-type: x proximity;
+      padding: 0.5rem 0.25rem;
+      margin: 0;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* IE/Edge */
+    }
+
+    .day-selector::-webkit-scrollbar {
+      display: none; /* Chrome/Safari */
     }
 
     .day-selector button {
       flex: 0 0 auto;
       scroll-snap-align: start;
+      padding: 0.5rem 0.85rem;
     }
   }
 </style>

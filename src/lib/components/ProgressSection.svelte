@@ -9,7 +9,6 @@
     return match ? Number(match[1]) : 0;
   };
 
-  // Calculate progression indicators
   const getProgressionIndicator = (current: string, previous: string) => {
     const currentVal = numericValue(current);
     const prevVal = numericValue(previous);
@@ -50,25 +49,22 @@
     1,
   );
 
-  // Calculate chart points with proper scaling
   $: chartPoints = progressHistory
     .map((point, index) => {
       if (progressHistory.length === 1) {
-        return `0,${100 - (point.value / maxHistoryValue) * 80}`; // Leave 20% padding at top
+        return `0,${100 - (point.value / maxHistoryValue) * 80}`;
       }
       const x = (index / (progressHistory.length - 1)) * 100;
-      const y = 100 - (point.value / maxHistoryValue) * 80; // Leave 20% padding at top
+      const y = 100 - (point.value / maxHistoryValue) * 80;
       return `${x},${y}`;
     })
     .join(" ");
 
-  // Create area chart polygon
   $: areaPoints = (() => {
     const points = chartPoints;
     return `0,100 ${points} 100,100`;
   })();
 
-  // Statistics
   $: totalChecked = Object.values($progressStore.weeklyCheck ?? {}).filter(
     Boolean,
   ).length;
@@ -205,11 +201,11 @@
         </div>
       </div>
       <div class="stat-item">
-        <span class="material-icon" style="color: {trendInfo.color}"
-          >{trendInfo.icon}</span
+        <span class="material-icon" style="color: {trendInfo?.color}"
+          >{trendInfo?.icon}</span
         >
         <div>
-          <strong style="color: {trendInfo.color}">{trendInfo.text}</strong>
+          <strong style="color: {trendInfo?.color}">{trendInfo?.text}</strong>
           <small>Tendencia</small>
         </div>
       </div>
@@ -260,7 +256,7 @@
 <style>
   .progress-area {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
     gap: 1.5rem;
   }
 
@@ -556,13 +552,19 @@
       padding: 1.25rem;
     }
 
-    .progress-area {
-      grid-template-columns: 1fr;
+    .section-header {
+      flex-direction: row;
+      flex-wrap: wrap;
     }
 
-    .section-header {
-      flex-direction: column;
-      align-items: flex-start;
+    .section-header > div:first-child {
+      flex: 1 1 100%;
+      justify-content: center;
+    }
+
+    .completion-badge {
+      flex: 1 1 100%;
+      text-align: center;
     }
 
     .stats-row {

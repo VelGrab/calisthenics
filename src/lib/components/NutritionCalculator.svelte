@@ -1,6 +1,6 @@
 <script lang="ts">
   import { nutritionStore } from "$lib/stores/nutrition";
-  
+
   type GoalValue = "deficit" | "maintain" | "surplus";
 
   const activityLevels = [
@@ -46,7 +46,7 @@
   const suggestAdjustment = (
     maintenance: number,
     weightKg: number,
-    objective: GoalValue
+    objective: GoalValue,
   ) => {
     if (!maintenance || objective === "maintain") return 0;
 
@@ -61,15 +61,13 @@
     return Math.round(clamp(suggested, 200, 500));
   };
 
-  // Initialize from store
   let weight: number | string = $nutritionStore.weight;
   let height: number | string = $nutritionStore.height;
   let age: number | string = $nutritionStore.age;
   let sex: "male" | "female" = $nutritionStore.sex;
   let activity = $nutritionStore.activity;
   let goal: GoalValue = $nutritionStore.goal;
-  
-  // Update store when values change
+
   $: nutritionStore.updateField("weight", weight);
   $: nutritionStore.updateField("height", height);
   $: nutritionStore.updateField("age", age);
@@ -82,13 +80,26 @@
   $: parsedAge = ensureNumber(age);
   $: bmr = Math.max(
     0,
-    Math.round(10 * parsedWeight + 6.25 * parsedHeight - 5 * parsedAge + (sex === "male" ? 5 : -161))
+    Math.round(
+      10 * parsedWeight +
+        6.25 * parsedHeight -
+        5 * parsedAge +
+        (sex === "male" ? 5 : -161),
+    ),
   );
-  $: maintenanceCalories = Math.max(0, Math.round(bmr * getActivityFactor(activity)));
-  $: goalAdjustment = suggestAdjustment(maintenanceCalories, parsedWeight, goal);
-  $: goalPercent = maintenanceCalories > 0 && goalAdjustment > 0
-    ? Math.round((goalAdjustment / maintenanceCalories) * 100)
-    : 0;
+  $: maintenanceCalories = Math.max(
+    0,
+    Math.round(bmr * getActivityFactor(activity)),
+  );
+  $: goalAdjustment = suggestAdjustment(
+    maintenanceCalories,
+    parsedWeight,
+    goal,
+  );
+  $: goalPercent =
+    maintenanceCalories > 0 && goalAdjustment > 0
+      ? Math.round((goalAdjustment / maintenanceCalories) * 100)
+      : 0;
   $: targetCalories =
     goal === "deficit"
       ? Math.max(0, maintenanceCalories - goalAdjustment)
@@ -119,8 +130,9 @@
     <p class="eyebrow">Nutrición</p>
     <h2>Calcula tus calorías diarias</h2>
     <p>
-      Introduce tus datos y te sugeriremos automáticamente el rango de calorías para mantener, bajar grasa o ganar músculo sin improvisar.
-      La fórmula usa Mifflin-St Jeor, precisa para deportistas recreativos.
+      Introduce tus datos y te sugeriremos automáticamente el rango de calorías
+      para mantener, bajar grasa o ganar músculo sin improvisar. La fórmula usa
+      Mifflin-St Jeor, precisa para deportistas recreativos.
     </p>
     <ul>
       <li>Actualiza peso y actividad cada 4–6 semanas.</li>
@@ -134,15 +146,35 @@
     <div class="input-grid">
       <label>
         <span>Peso (kg)</span>
-        <input type="number" min="35" max="200" step="0.5" bind:value={weight} inputmode="decimal" />
+        <input
+          type="number"
+          min="35"
+          max="200"
+          step="0.5"
+          bind:value={weight}
+          inputmode="decimal"
+        />
       </label>
       <label>
         <span>Altura (cm)</span>
-        <input type="number" min="120" max="220" step="1" bind:value={height} inputmode="decimal" />
+        <input
+          type="number"
+          min="120"
+          max="220"
+          step="1"
+          bind:value={height}
+          inputmode="decimal"
+        />
       </label>
       <label>
         <span>Edad</span>
-        <input type="number" min="14" max="80" bind:value={age} inputmode="numeric" />
+        <input
+          type="number"
+          min="14"
+          max="80"
+          bind:value={age}
+          inputmode="numeric"
+        />
       </label>
       <label>
         <span>Sexo biológico</span>
@@ -185,12 +217,20 @@
       </div>
       <div class="result-card">
         <p>Mantenimiento estimado</p>
-        <strong>{maintenanceCalories ? `${formatCalories(maintenanceCalories)} kcal` : "--"}</strong>
+        <strong
+          >{maintenanceCalories
+            ? `${formatCalories(maintenanceCalories)} kcal`
+            : "--"}</strong
+        >
         <small>Incluyendo movimiento diario.</small>
       </div>
       <div class="result-card result-card--accent">
         <p>{goalLabel}</p>
-        <strong>{targetCalories ? `${formatCalories(targetCalories)} kcal` : "--"}</strong>
+        <strong
+          >{targetCalories
+            ? `${formatCalories(targetCalories)} kcal`
+            : "--"}</strong
+        >
         <small>{goalSummary}</small>
       </div>
     </div>
@@ -199,7 +239,11 @@
 
 <style>
   .nutrition {
-    background: radial-gradient(circle at top right, rgba(102, 255, 216, 0.15), transparent),
+    background: radial-gradient(
+        circle at top right,
+        rgba(102, 255, 216, 0.15),
+        transparent
+      ),
       rgba(15, 16, 32, 0.9);
     border-radius: 1.75rem;
     padding: 2rem;
@@ -289,7 +333,9 @@
     border: 1px solid rgba(255, 255, 255, 0.08);
     background: rgba(255, 255, 255, 0.03);
     cursor: pointer;
-    transition: border-color 0.2s ease, transform 0.2s ease;
+    transition:
+      border-color 0.2s ease,
+      transform 0.2s ease;
   }
 
   .goal-option.selected {

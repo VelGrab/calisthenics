@@ -358,20 +358,32 @@
     outline: none;
   }
 
-  .btn-minus:hover,
+  .btn-minus:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--accent);
+  }
+
   .btn-plus:hover {
     background: rgba(255, 255, 255, 0.08);
     border-color: var(--accent);
   }
 
-  .btn-minus:focus-visible,
+  .btn-minus:focus-visible {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(102, 255, 216, 0.3);
+  }
+
   .btn-plus:focus-visible {
     background: rgba(255, 255, 255, 0.08);
     border-color: var(--accent);
     box-shadow: 0 0 0 2px rgba(102, 255, 216, 0.3);
   }
 
-  .btn-minus:active,
+  .btn-minus:active {
+    transform: scale(0.95);
+  }
+
   .btn-plus:active {
     transform: scale(0.95);
   }
