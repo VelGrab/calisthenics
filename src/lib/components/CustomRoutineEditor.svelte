@@ -221,6 +221,7 @@
     font-size: 0.9rem;
     font-family: inherit;
     margin-bottom: 0.75rem;
+    box-sizing: border-box;
   }
 
   .search-input:focus {
