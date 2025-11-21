@@ -358,16 +358,6 @@
     outline: none;
   }
 
-  .btn-minus:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: var(--accent);
-  }
-
-  .btn-plus:hover {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: var(--accent);
-  }
-
   .btn-minus:focus-visible {
     background: rgba(255, 255, 255, 0.08);
     border-color: var(--accent);
@@ -399,12 +389,6 @@
     box-sizing: border-box;
     transition: border-color 0.2s ease;
   }
-
-  /* input[type="number"]:focus,
-  textarea:focus {
-    outline: none;
-    border-color: var(--accent);
-  } */
 
   textarea {
     min-height: 60px;
