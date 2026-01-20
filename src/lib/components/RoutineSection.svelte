@@ -126,11 +126,7 @@
 
           <div class="exercise-grid">
             {#each block.exercises as exercise}
-              <ExerciseTracker
-                dayId={selectedDay.id}
-                {exercise}
-                blockStyle={block.style}
-              />
+              <ExerciseTracker dayId={selectedDay.id} {exercise} />
             {/each}
           </div>
 

@@ -1,4 +1,4 @@
-export type WorkoutStyle = "EMOM" | "Tradicional";
+export type WorkoutStyle = "Tradicional";
 
 export interface Exercise {
   name: string;
@@ -44,16 +44,15 @@ export const routineDays: RoutineDay[] = [
     focus: "Pecho, Hombros, Tríceps + ABS (Core Funcional)",
     core: true,
     highlight:
-      "Combina EMOM controlado y series al fallo técnico, abs siempre sin tocar el suelo.",
+      "Entrenamiento completo de empuje vertical y horizontal con core funcional.",
     blocks: [
       {
-        style: "EMOM",
-        duration: "10 min c/u",
-        description: "Empuje vertical y fondos manteniendo RPE 7–8.",
+        style: "Tradicional",
+        description: "Pecho, hombros, tríceps y core sin tocar el suelo.",
         exercises: [
           {
             name: "Pike push-ups / Handstand push-ups",
-            target: "4–5 reps/min × 10 min",
+            target: "4×5–8",
             difficulty: "Avanzado",
             videoUrl:
               "https://www.youtube.com/results?search_query=pike+push+ups+handstand+pushups",
@@ -62,19 +61,12 @@ export const routineDays: RoutineDay[] = [
           },
           {
             name: "Fondos en paralelas",
-            target: "3–4 reps/min × 10 min",
+            target: "4×6–10",
             difficulty: "Intermedio",
             videoUrl:
               "https://www.youtube.com/results?search_query=fondos+paralelas+tecnica",
             notes: "Bajada lenta, pecho abierto y bloquea codos solo al final.",
           },
-        ],
-      },
-      {
-        style: "Tradicional",
-        description:
-          "Hipertrofia de empuje tempo lento, llega al fallo técnico.",
-        exercises: [
           {
             name: "Flexiones declinadas",
             target: "4×6–10",
@@ -93,15 +85,6 @@ export const routineDays: RoutineDay[] = [
               "Realiza media repetición y luego la completa sin perder tensión.",
           },
           {
-            name: "Enterradoras (finisher opcional)",
-            target: "4×7",
-            difficulty: "Intermedio",
-            videoUrl:
-              "https://www.youtube.com/results?search_query=enterradoras+flexiones",
-            notes:
-              "Úsalas solo si queda energía para terminar con bombeo extra.",
-          },
-          {
             name: "Elevaciones laterales con banda",
             target: "3×8–12",
             difficulty: "Básico",
@@ -109,13 +92,6 @@ export const routineDays: RoutineDay[] = [
               "https://www.youtube.com/results?search_query=elevaciones+laterales+banda",
             notes: "Mantén codos semirrígidos y controla la bajada.",
           },
-        ],
-      },
-      {
-        style: "Tradicional",
-        description:
-          "ABS funcionales en barra o apoyo elevado, sin tocar el suelo.",
-        exercises: [
           {
             name: "Plancha inclinada en barra",
             target: "3×40–60 s",
@@ -151,17 +127,15 @@ export const routineDays: RoutineDay[] = [
     icon: "taunt",
     focus: "Espalda y Bíceps",
     highlight:
-      "Controla negativos en dominadas y remos, termina con agarre isométrico.",
+      "Entrenamiento completo de tirón: dominadas, remos y bíceps.",
     blocks: [
       {
-        style: "EMOM",
-        duration: "10 min c/u",
-        description:
-          "Dominadas asistidas y remo invertido priorizando técnica.",
+        style: "Tradicional",
+        description: "Espalda y bíceps con control y pausas.",
         exercises: [
           {
             name: "Dominadas negativas o asistidas",
-            target: "3–4 reps/min × 10 min",
+            target: "4×4–8",
             difficulty: "Intermedio",
             videoUrl:
               "https://www.youtube.com/results?search_query=dominadas+negativas",
@@ -169,18 +143,12 @@ export const routineDays: RoutineDay[] = [
           },
           {
             name: "Remo invertido (barra/mesa/anillas)",
-            target: "8–10 reps/min × 10 min",
+            target: "4×8–12",
             difficulty: "Básico",
             videoUrl:
               "https://www.youtube.com/results?search_query=remo+invertido+barra",
             notes: "Ajusta la altura de los pies para regular la intensidad.",
           },
-        ],
-      },
-      {
-        style: "Tradicional",
-        description: "Hipertrofia del tirón con pausas arriba.",
-        exercises: [
           {
             name: "Chin-up con pausa arriba (lag)",
             target: "4×3–5",
@@ -206,12 +174,6 @@ export const routineDays: RoutineDay[] = [
             notes:
               "Hombros alineados encima de las manos, controla la palanca.",
           },
-        ],
-      },
-      {
-        style: "Tradicional",
-        description: "Final isométrico para el agarre supino.",
-        exercises: [
           {
             name: "Hang supino (agarre de bíceps)",
             target: "3×10–15 s",
@@ -230,16 +192,15 @@ export const routineDays: RoutineDay[] = [
     icon: "directions_walk",
     focus: "Piernas",
     highlight:
-      "Mantén rango completo, añade salto o lastre si el volumen resulta fácil.",
+      "Entrenamiento completo de piernas con rango completo y control.",
     blocks: [
       {
-        style: "EMOM",
-        duration: "10 min c/u",
-        description: "Resistencia local y control unilateral durante 20 min.",
+        style: "Tradicional",
+        description: "Piernas completas: cuádriceps, glúteos y femoral.",
         exercises: [
           {
             name: "Sentadilla profunda",
-            target: "10 reps/min × 10 min",
+            target: "4×12–15",
             difficulty: "Básico",
             videoUrl:
               "https://www.youtube.com/results?search_query=sentadilla+profunda+calistenia",
@@ -247,18 +208,12 @@ export const routineDays: RoutineDay[] = [
           },
           {
             name: "Zancadas alternadas",
-            target: "8 por pierna/min × 10 min",
+            target: "4×10–12 por pierna",
             difficulty: "Intermedio",
             videoUrl:
               "https://www.youtube.com/results?search_query=zancadas+alternadas",
             notes: "Mantén torso erguido y paso largo para activar glúteo.",
           },
-        ],
-      },
-      {
-        style: "Tradicional",
-        description: "Glúteo y femoral, prioriza control y isometrías.",
-        exercises: [
           {
             name: "Puente de glúteo unilateral",
             target: "3×10–12 por pierna",
@@ -275,13 +230,6 @@ export const routineDays: RoutineDay[] = [
               "https://www.youtube.com/results?search_query=wall+sit+isometrico",
             notes: "Ajusta a 90° de rodilla, no apoyes manos en las piernas.",
           },
-        ],
-      },
-      {
-        style: "Tradicional",
-        description:
-          "Opcional: potencia al final para elevar la frecuencia cardiaca.",
-        exercises: [
           {
             name: "Sentadilla con salto (opcional)",
             target: "2×10",
@@ -299,16 +247,15 @@ export const routineDays: RoutineDay[] = [
     label: "Jueves",
     icon: "bolt",
     focus: "Pecho, Hombros, Tríceps (Variación)",
-    highlight: "Énfasis en tempo y pseudo planche, sin fallo en EMOM.",
+    highlight: "Énfasis en tempo y control, variaciones técnicas de empuje.",
     blocks: [
       {
-        style: "EMOM",
-        duration: "10 min c/u",
-        description: "Variaciones técnicas con bajadas controladas.",
+        style: "Tradicional",
+        description: "Variaciones técnicas de empuje con tempo lento.",
         exercises: [
           {
             name: "Fondos tempo (3 s de bajada)",
-            target: "3 reps/min × 10 min",
+            target: "4×5–8",
             difficulty: "Avanzado",
             videoUrl:
               "https://www.youtube.com/results?search_query=fondos+tempo+calistenia",
@@ -316,20 +263,13 @@ export const routineDays: RoutineDay[] = [
           },
           {
             name: "Flexiones arqueras / pseudo planche push-ups",
-            target: "5 reps/min × 10 min",
+            target: "4×6–10",
             difficulty: "Avanzado",
             videoUrl:
               "https://www.youtube.com/results?search_query=pseudo+planche+push+ups",
             notes:
               "Carga el peso hacia delante, alterna lados si usas arqueras.",
           },
-        ],
-      },
-      {
-        style: "Tradicional",
-        description:
-          "Series lentas y isométricas para reforzar hombro anterior.",
-        exercises: [
           {
             name: "Pike push-up isométrico (hold arriba)",
             target: "3×10 s",
@@ -365,16 +305,15 @@ export const routineDays: RoutineDay[] = [
     icon: "sync",
     focus: "Espalda, Bíceps + ABS (Estética + Fuerza)",
     core: true,
-    highlight: "Último día: tirón con pausa y core colgado sin tocar el suelo.",
+    highlight: "Entrenamiento completo de tirón y core funcional.",
     blocks: [
       {
-        style: "EMOM",
-        duration: "10 min c/u",
-        description: "Dominadas con pausa y remo pronado para densidad.",
+        style: "Tradicional",
+        description: "Espalda, bíceps y core sin tocar el suelo.",
         exercises: [
           {
             name: "Chin-ups con pausa arriba",
-            target: "3–4 reps/min × 10 min",
+            target: "4×4–8",
             difficulty: "Avanzado",
             videoUrl:
               "https://www.youtube.com/results?search_query=chin+up+pausa",
@@ -382,18 +321,12 @@ export const routineDays: RoutineDay[] = [
           },
           {
             name: "Remo invertido estrecho o pronado",
-            target: "8 reps/min × 10 min",
+            target: "4×8–12",
             difficulty: "Intermedio",
             videoUrl:
               "https://www.youtube.com/results?search_query=remo+invertido+pronado",
             notes: "Agarre estrecho, core firme y glúteos apretados.",
           },
-        ],
-      },
-      {
-        style: "Tradicional",
-        description: "Tirón accesible para congestión final.",
-        exercises: [
           {
             name: "Australianas supinas",
             target: "3×8–12",
@@ -410,12 +343,6 @@ export const routineDays: RoutineDay[] = [
               "https://www.youtube.com/results?search_query=curl+con+banda+toalla",
             notes: "Tempo de 2 s subida + 2 s bajada sin balanceo.",
           },
-        ],
-      },
-      {
-        style: "Tradicional",
-        description: "ABS fuerza + estética sin apoyar en el suelo.",
-        exercises: [
           {
             name: "Hanging knee raises",
             target: "3×10–12",
@@ -461,7 +388,7 @@ export const weeklyProgression: WeeklyProgression[] = [
   },
   {
     week: "Semanas 3–4",
-    adjustment: "+1 rep/min en EMOM principales si controlas el ritmo.",
+    adjustment: "+1 rep/min en bloques principales si controlas el ritmo.",
   },
   {
     week: "Semanas 5–6",
@@ -474,7 +401,7 @@ export const weeklyProgression: WeeklyProgression[] = [
 ];
 
 export const generalTips = [
-  "No llegues al fallo en EMOM (RPE 7–8).",
+  "No llegues al fallo en bloques controlados (RPE 7–8).",
   "Sí busca fallo técnico en series tradicionales.",
   "Descanso entre series: 60–90 s.",
   "Mantén abdomen firme en todos los movimientos.",
@@ -486,36 +413,36 @@ export const weeklyRegister: RegisterEntry[] = [
   {
     day: "Lunes",
     exercise: "Pike push-ups / HSPU",
-    weeks: ["4 reps/min", "4 reps/min", "5 reps/min", "5 reps/min + lastre"],
+    weeks: ["4×5", "4×6", "4×7", "4×8 + lastre"],
   },
   {
     day: "Martes",
     exercise: "Chin-up lag",
-    weeks: ["3 reps/min", "3 reps/min", "4 reps/min", "4 reps/min + mochila"],
+    weeks: ["4×3", "4×4", "4×5", "4×5 + mochila"],
   },
   {
     day: "Miércoles",
     exercise: "Sentadilla profunda",
     weeks: [
-      "10 reps/min",
-      "10 reps/min",
-      "11 reps/min",
-      "12 reps/min con salto",
+      "4×12",
+      "4×13",
+      "4×14",
+      "4×15 con salto",
     ],
   },
   {
     day: "Jueves",
     exercise: "Fondos tempo",
     weeks: [
-      "3 reps/min",
-      "3 reps/min",
-      "4 reps/min",
-      "4 reps/min + tempo lento",
+      "4×5",
+      "4×6",
+      "4×7",
+      "4×8 + tempo lento",
     ],
   },
   {
     day: "Viernes",
     exercise: "Chin-ups pausa",
-    weeks: ["3 reps/min", "3 reps/min", "4 reps/min", "4 reps/min + isometría"],
+    weeks: ["4×4", "4×5", "4×6", "4×7 + isometría"],
   },
 ];

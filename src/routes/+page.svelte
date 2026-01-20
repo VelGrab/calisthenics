@@ -8,14 +8,13 @@
     NutritionCalculator,
     TipsSection,
     RoutineSection,
-    ProgressSection,
   } from "$lib";
 
   const structureHighlights = [
     {
-      label: "Bloques EMOM",
-      value: "2 ejercicios × 10 min",
-      detail: "Ritmo constante (RPE 7–8)",
+      label: "Bloques tradicionales",
+      value: "5-8 ejercicios × día",
+      detail: "Series y repeticiones controladas",
     },
     {
       label: "Series tradicionales",
@@ -31,8 +30,12 @@
 
   const totalExercises = routineDays.reduce(
     (acc, day) =>
-      acc + day.blocks.reduce((blockAcc, block) => blockAcc + block.exercises.length, 0),
-    0
+      acc +
+      day.blocks.reduce(
+        (blockAcc, block) => blockAcc + block.exercises.length,
+        0,
+      ),
+    0,
   );
 
   const resetProgress = () => {
@@ -43,15 +46,20 @@
 
   const scrollToSection = (targetId: string) => {
     if (typeof document === "undefined") return;
-    document.getElementById(targetId)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    document
+      .getElementById(targetId)
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   $: completedExercises = Object.values($progressStore.log ?? {}).reduce(
     (acc, exercises) =>
-      acc + Object.values(exercises).filter((exercise) => exercise.completed).length,
-    0
+      acc +
+      Object.values(exercises).filter((exercise) => exercise.completed).length,
+    0,
   );
-  $: completionPercent = Math.round((completedExercises / totalExercises) * 100);
+  $: completionPercent = Math.round(
+    (completedExercises / totalExercises) * 100,
+  );
 </script>
 
 <svelte:head>
@@ -71,15 +79,16 @@
     onReset={resetProgress}
   />
 
-  <ShortcutsSection onScrollToSection={scrollToSection} onReset={resetProgress} />
+  <ShortcutsSection
+    onScrollToSection={scrollToSection}
+    onReset={resetProgress}
+  />
 
   <NutritionCalculator />
 
   <TipsSection tips={generalTips} />
 
   <RoutineSection />
-
-  <ProgressSection />
 </main>
 
 <style>

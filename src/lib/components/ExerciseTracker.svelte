@@ -4,7 +4,6 @@
 
   export let dayId: string;
   export let exercise: Exercise;
-  export let blockStyle: WorkoutStyle = "EMOM";
 
   let current: ExerciseProgress = createEmptyExerciseProgress();
 
@@ -68,8 +67,7 @@
   $: current =
     $progressStore.log?.[dayId]?.[exercise.name] ??
     createEmptyExerciseProgress();
-  $: completionLabel =
-    blockStyle === "EMOM" ? "Min completados" : "Repeticiones completadas";
+  $: completionLabel = "Repeticiones completadas";
 </script>
 
 <article class="exercise-card" class:completed={current.completed}>

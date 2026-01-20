@@ -14,11 +14,12 @@
 
 <section class="hero" id="overview-section">
   <div class="hero-content">
-    <p class="eyebrow">Rutina híbrida · EMOM + Tradicional</p>
+    <p class="eyebrow">Rutina tradicional · Fuerza y control</p>
     <h1>Calistenia orientada a fuerza, control y estética</h1>
     <p class="lede">
-      Sigue los bloques diarios, registra reps/minuto y percibe tu progreso semana a semana.
-      Todo se guarda en tu navegador para que retomes cada sesión rápidamente.
+      Sigue los bloques diarios, registra tus series y repeticiones, y percibe
+      tu progreso semana a semana. Todo se guarda en tu navegador para que
+      retomes cada sesión rápidamente.
     </p>
 
     <div class="stats-grid">
@@ -37,7 +38,9 @@
       {/each}
     </div>
 
-    <button class="reset" type="button" on:click={onReset}>Limpiar progreso</button>
+    <button class="reset" type="button" on:click={onReset}
+      >Limpiar progreso</button
+    >
   </div>
 </section>
 
